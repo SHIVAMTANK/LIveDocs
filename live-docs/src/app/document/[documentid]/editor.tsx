@@ -1,5 +1,6 @@
 "use client";
 
+import Underline from '@tiptap/extension-underline'
 import ImageResize from "tiptap-extension-resize-image"
 import Image from '@tiptap/extension-image'
 import Table from '@tiptap/extension-table'
@@ -39,9 +40,7 @@ export const Editor = () => {
     onContentError({editor}){
         setEditor(editor);
     },
-    onPaste({editor}){
-        setEditor(editor);
-    },
+   
     editorProps: {
         attributes: {
             style:"padding-left: 56px; padding-right: 56px;",
@@ -49,6 +48,7 @@ export const Editor = () => {
         },
     },
     extensions: [StarterKit,
+      Underline,  
         ImageResize,
          Image,
          TaskList,
