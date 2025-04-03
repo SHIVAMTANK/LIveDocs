@@ -1,5 +1,6 @@
 "use client";
 
+import FontFamily from '@tiptap/extension-font-family'
 import Underline from '@tiptap/extension-underline'
 import ImageResize from "tiptap-extension-resize-image"
 import Image from '@tiptap/extension-image'
@@ -12,6 +13,7 @@ import TaskList from "@tiptap/extension-task-list";
 import TaskItem from "@tiptap/extension-task-item";
 import StarterKit from "@tiptap/starter-kit";
 import useEditorStore from "@/store/use-editor-store";
+import TextStyle from '@tiptap/extension-text-style'
 
 export const Editor = () => {
     const{setEditor} = useEditorStore();
@@ -48,7 +50,9 @@ export const Editor = () => {
         },
     },
     extensions: [StarterKit,
-      Underline,  
+        TextStyle,
+        FontFamily,
+        Underline,  
         ImageResize,
          Image,
          TaskList,
