@@ -1,70 +1,78 @@
 "use client";
 
-import FontFamily from '@tiptap/extension-font-family'
-import Underline from '@tiptap/extension-underline'
-import ImageResize from "tiptap-extension-resize-image"
-import Image from '@tiptap/extension-image'
-import Table from '@tiptap/extension-table'
-import TableCell from '@tiptap/extension-table-cell'
-import TableHeader from '@tiptap/extension-table-header'
-import TableRow from '@tiptap/extension-table-row'
+import FontFamily from "@tiptap/extension-font-family";
+import Underline from "@tiptap/extension-underline";
+import ImageResize from "tiptap-extension-resize-image";
+import Image from "@tiptap/extension-image";
+import Table from "@tiptap/extension-table";
+import TableCell from "@tiptap/extension-table-cell";
+import TableHeader from "@tiptap/extension-table-header";
+import TableRow from "@tiptap/extension-table-row";
 import { useEditor, EditorContent } from "@tiptap/react";
 import TaskList from "@tiptap/extension-task-list";
 import TaskItem from "@tiptap/extension-task-item";
 import StarterKit from "@tiptap/starter-kit";
 import useEditorStore from "@/store/use-editor-store";
-import TextStyle from '@tiptap/extension-text-style'
+import TextStyle from "@tiptap/extension-text-style";
+import { Color } from "@tiptap/extension-color";
+import Highlight from "@tiptap/extension-highlight";
 
 export const Editor = () => {
-    const{setEditor} = useEditorStore();
+  const { setEditor } = useEditorStore();
   const editor = useEditor({
-    onCreate({editor}){
-        setEditor(editor);
+    onCreate({ editor }) {
+      setEditor(editor);
     },
-    onDestroy(){
-        setEditor(null);
+    onDestroy() {
+      setEditor(null);
     },
-    onUpdate({editor}){
-        setEditor(editor);
+    onUpdate({ editor }) {
+      setEditor(editor);
     },
-    onSelectionUpdate({editor}){
-        setEditor(editor);
+    onSelectionUpdate({ editor }) {
+      setEditor(editor);
     },
-    onTransaction({editor}){
-        setEditor(editor);
+    onTransaction({ editor }) {
+      setEditor(editor);
     },
-    onFocus({editor}){
-        setEditor(editor);
+    onFocus({ editor }) {
+      setEditor(editor);
     },
-    onBlur({editor}){
-        setEditor(editor);
+    onBlur({ editor }) {
+      setEditor(editor);
     },
-    onContentError({editor}){
-        setEditor(editor);
+    onContentError({ editor }) {
+      setEditor(editor);
     },
-   
+
     editorProps: {
-        attributes: {
-            style:"padding-left: 56px; padding-right: 56px;",
-            class: "focus:outline-none print:border-0 bg-white border border-[#C7C7C7] flex flex-col min-h-[1054px] w-[816px] pt-10 pr-14 pb-10 cursor-text",
-        },
+      attributes: {
+        style: "padding-left: 56px; padding-right: 56px;",
+        class:
+          "focus:outline-none print:border-0 bg-white border border-[#C7C7C7] flex flex-col min-h-[1054px] w-[816px] pt-10 pr-14 pb-10 cursor-text",
+      },
     },
-    extensions: [StarterKit,
-        TextStyle,
-        FontFamily,
-        Underline,  
-        ImageResize,
-         Image,
-         TaskList,
-         Table,
-         TableCell,
-         TableHeader,
-         TableRow,
-         TaskItem.configure({
-            nested: true,
-         }),
-        ],
-   content: `
+    extensions: [
+      StarterKit,
+      Highlight.configure({
+        multicolor:true,
+      }),
+      Color,
+      TextStyle,
+      FontFamily,
+      Underline,
+      ImageResize,
+      Image,
+      TaskList,
+      Table,
+      TableCell,
+      TableHeader,
+      TableRow,
+      TaskItem.configure({
+        nested: true,
+      }),
+    ],
+    content: `
     <table>
       <tbody>
         <tr>
