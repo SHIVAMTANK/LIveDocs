@@ -9,7 +9,9 @@ import {
   ChevronDownIcon,
   Highlighter,
   HighlighterIcon,
+  ImageIcon,
   ItalicIcon,
+  Link2Icon,
   ListTodoIcon,
   LucideIcon,
   MessageSquare,
@@ -17,9 +19,11 @@ import {
   PrinterIcon,
   Redo2Icon,
   RemoveFormattingIcon,
+  SearchIcon,
   SpellCheckIcon,
   UnderlineIcon,
   Undo2Icon,
+  UploadCloudIcon,
 } from "lucide-react";
 import { useState } from "react";
 import { checkText } from "@/services/spell-checker";
@@ -29,6 +33,8 @@ import {
   DialogContent,
   DialogTitle,
   DialogTrigger,
+  DialogFooter,
+  DialogHeader,
 } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -37,18 +43,145 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+
 import { type Level } from "@tiptap/extension-heading";
 import Color from "@tiptap/extension-color";
 import { type ColorResult, CirclePicker, SketchPicker } from "react-color";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+
+const ImageButton = () => {
+  const { editor } = useEditorStore();
+  const [imgUrl, setImgUrl] = useState("");
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [open, setIsOpen] = useState(false);
+
+  const onChange = (src: string) => {
+    editor?.chain().focus().setImage({ src }).run();
+  };
+
+  const onUpload = () => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/*";
+
+    input.onchange = (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (file) {
+        const imageUrl = URL.createObjectURL(file);
+        onChange(imageUrl);
+      }
+    };
+    input.click();
+  };
+
+  const handleImageUrlSubmit = () => {
+    if (imgUrl) {
+      onChange(imgUrl);
+      setImgUrl("");
+      setIsDialogOpen(false);
+    }
+  };
+
+  return (
+    <>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <button className="h-10 w-10 shrink-0 flex flex-col items-center justify-center rounded-md hover:bg-neutral-200/80 px-2 overflow-hidden text-base">
+            <ImageIcon className="size-4" />
+          </button>
+        </DropdownMenuTrigger>
+
+        <DropdownMenuContent>
+          <DropdownMenuItem onClick={onUpload}>
+            <UploadCloudIcon className="size-4 mr-2" />
+            Upload
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => setIsDialogOpen(true)}>
+            <SearchIcon className="size-4 mr-2" />
+            Paste image url
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Insert image URL</DialogTitle>
+          </DialogHeader>
+          <Input
+            placeholder="Insert image URL"
+            value={imgUrl}
+            onChange={(e) => setImgUrl(e.target.value)}
+            onKeyDown={(e)=>{
+              if(e.key === "Enter"){
+                handleImageUrlSubmit();
+              }
+            }}
+          />
+           <DialogFooter>
+          <Button onClick={handleImageUrlSubmit}>
+              Insert
+          </Button>
+        </DialogFooter>
+        </DialogContent>
+       
+      </Dialog>
+    </>
+  );
+};
+
+const LinkButton = () => {
+  const { editor } = useEditorStore();
+  const [value, setValue] = useState("");
+  const [open, setIsOpen] = useState(false);
+
+  const onChange = (href: string) => {
+    editor?.chain().focus().extendMarkRange("link").setLink({ href }).run();
+    setValue("");
+  };
+
+  return (
+    <DropdownMenu
+      open={open}
+      onOpenChange={(open) => {
+        if (open) {
+          setValue(editor?.getAttributes("link").href || "");
+          setIsOpen;
+        }
+      }}
+    >
+      <DropdownMenuTrigger asChild>
+        <button className="h-10 w-10 shrink-0 flex flex-col items-center justify-center rounded-md hover:bg-neutral-200/80 px-2 overflow-hidden text-base">
+          <Link2Icon className="size-4" />
+        </button>
+      </DropdownMenuTrigger>
+
+      <DropdownMenuContent className="px-2.5 py-3 flex items-center gap-x-2 ">
+        <Input
+          className="h-12"
+          placeholder="https://example.com"
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+        />
+        <Button
+          className="h-12"
+          onClick={() => {
+            onChange(value);
+            setIsOpen(false);
+          }}
+        >
+          Apply
+        </Button>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
 
 const HighlightColorButton = () => {
   const { editor } = useEditorStore();
   const value = editor?.getAttributes("highlight").color || "#FFFFFF";
   const [open, setIsOpen] = useState(false);
-
-
-
-
 
   const onChange = (color: ColorResult) => {
     editor?.chain().focus().setHighlight({ color: color.hex }).run();
@@ -59,7 +192,7 @@ const HighlightColorButton = () => {
     <DropdownMenu open={open} onOpenChange={setIsOpen}>
       <DropdownMenuTrigger asChild>
         <button className="h-10 w-10 shrink-0 flex flex-col items-center justify-center rounded-md hover:bg-neutral-200/80 px-2 overflow-hidden text-base">
-         <HighlighterIcon className="size-4" />
+          <HighlighterIcon className="size-4" />
         </button>
       </DropdownMenuTrigger>
 
@@ -372,8 +505,8 @@ export const Toolbar = () => {
         <TextColorButton />
         <HighlightColorButton />
         <Separator orientation="vertical" className="h-6 bg-neutral-300" />
-        {/* todo link */}
-        {/* todo image */}
+        <LinkButton />
+        <ImageButton/>
         {/* align */}
         {/* line height*/}
         {/* list */}
