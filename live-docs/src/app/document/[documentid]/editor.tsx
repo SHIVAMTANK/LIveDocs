@@ -21,6 +21,7 @@ import TextAlign from '@tiptap/extension-text-align';
 import { FontSizeExtension } from "@/extensions/font-size";
 import { LineHeightExtension } from "@/extensions/line-height";
 import { types } from "util";
+import { Ruler } from "./ruler";
 
 
 
@@ -29,6 +30,7 @@ import { types } from "util";
 export const Editor = () => {
   const { setEditor } = useEditorStore();
   const editor = useEditor({
+    immediatelyRender:false,
     onCreate({ editor }) {
       setEditor(editor);
     },
@@ -114,6 +116,7 @@ export const Editor = () => {
 
   return (
     <div className="size-full overflow-auto bg-[#F9FBFD] px-4 print:px-0 print:bg-white print:overflow-visible">
+        <Ruler />
       <div className="min-w-max flex justify-center w-[816px] py-4 print:py-0 mx-auto print:w-full print:min-w-0">
         <EditorContent editor={editor} />
       </div>

@@ -63,19 +63,20 @@ import { Value } from "@radix-ui/react-select";
 import { Label } from "recharts";
 
 
+
+
+
 const LineHeightButton = () => {
   const { editor } = useEditorStore();
   const [open, setIsOpen] = useState(false);
 
   const lineHeights = [
-    {label:"Default",value:"normal"},
-    {label:"Single",value:"1"},
-    {label:"1.15",value:"1.15"},
-    {label:"1.5",value:"1.5"},
-    {label:"Double",value:"2"},
-
-    
-  ]
+    { label: "Default", value: "normal" },
+    { label: "Single", value: "1" },
+    { label: "1.15", value: "1.15" },
+    { label: "1.5", value: "1.5" },
+    { label: "Double", value: "2" },
+  ];
 
   return (
     <DropdownMenu open={open} onOpenChange={setIsOpen}>
@@ -92,10 +93,10 @@ const LineHeightButton = () => {
             onClick={() => editor?.chain().focus().setLineHeight(value).run()}
             className={cn(
               "flex items-center gap-x-2 px-2 py-1 rounded-sm hover:bg-neutral-200/80",
-              editor?.getAttributes("paragraph").lineHeight===value && "bg-neutral-200/80"
+              editor?.getAttributes("paragraph").lineHeight === value &&
+                "bg-neutral-200/80"
             )}
           >
-            
             <span className="text-sm">{label}</span>
           </button>
         ))}
@@ -103,10 +104,6 @@ const LineHeightButton = () => {
     </DropdownMenu>
   );
 };
-
-
-
-
 
 const FontSizeButton = () => {
   const { editor } = useEditorStore();
@@ -384,12 +381,15 @@ const LinkButton = () => {
   };
 
   return (
-    <DropdownMenu open={open} onOpenChange={(isOpen) => {
-      setIsOpen(isOpen);
-      if (isOpen) {
-        setValue(editor?.getAttributes("link").href || "");
-      }
-    }}>
+    <DropdownMenu
+      open={open}
+      onOpenChange={(isOpen) => {
+        setIsOpen(isOpen);
+        if (isOpen) {
+          setValue(editor?.getAttributes("link").href || "");
+        }
+      }}
+    >
       <DropdownMenuTrigger asChild>
         <button className="h-10 w-10 shrink-0 flex flex-col items-center justify-center rounded-md hover:bg-neutral-200/80 px-2 overflow-hidden text-base">
           <Link2Icon className="size-4" />
@@ -416,7 +416,6 @@ const LinkButton = () => {
     </DropdownMenu>
   );
 };
-
 
 const HighlightColorButton = () => {
   const { editor } = useEditorStore();
@@ -748,7 +747,7 @@ export const Toolbar = () => {
         <LinkButton />
         <ImageButton />
         <AlignButton />
-        <LineHeightButton/>
+        <LineHeightButton />
         <ListButton />
         {section[2].map((item) => (
           <ToolbarButton key={item.label} {...item} />
