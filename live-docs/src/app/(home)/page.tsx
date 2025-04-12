@@ -8,9 +8,11 @@ import { api } from "../../../convex/_generated/api";
 import { space } from "postcss/lib/list";
 import { Span } from "next/dist/trace";
 import { DocumentTable } from "./documents-table";
+import { useSearchParam } from "@/hooks/use-search-param";
 
 export default function Home() {
-  const {results,status,loadMore} = usePaginatedQuery(api.documents.get,{},{initialNumItems:5});
+  const [search] = useSearchParam("search");
+  const {results,status,loadMore} = usePaginatedQuery(api.documents.get,{search},{initialNumItems:5});
  
   return(
     <div className="flex flex-col  min-h-screen">
