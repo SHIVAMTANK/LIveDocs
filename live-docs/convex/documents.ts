@@ -2,6 +2,7 @@ import { mutation, query } from "./_generated/server";
 import { ConvexError, v } from "convex/values";
 import { paginationOptsValidator } from "convex/server";
 import { title } from "process";
+import { use } from "react";
 
 //a write oparation function
 //accepts tqo optional string argument
@@ -12,13 +13,22 @@ export const create = mutation({
     },
     handler:async (ctx,args) => {
         const user = await ctx.auth.getUserIdentity();
+
+
         if(!user){
             throw new ConvexError("Unathorized")
         }
 
+        const organizationId = (user.organization_id ?? undefined) as
+        | string
+        | undefined;
+
+
+
         const documentId = await ctx.db.insert("documents",{
             title:args.title ?? "Untitled Document",
             ownerId:user.subject,
+            organizationId,
             initialContent:args.initialContent,
         });
         return documentId;
@@ -34,7 +44,24 @@ export const get = query({
         if(!user){
             throw new ConvexError("unauthorized");
         }
+        console.log({user});
 
+        const organizationId = (user.organization_id ?? undefined) as
+        | string
+        | undefined;
+
+
+        //search within organization 
+        if(search && organizationId){
+            return await ctx.db
+            .query("documents")
+            .withSearchIndex("search_title",(q)=>
+                q.search("title",search).eq("organizationId",organizationId)
+            )
+            .paginate(paginationOpts)
+        }
+
+        //personal search
         if(search){
             return await ctx.db
             .query("documents")
@@ -44,7 +71,14 @@ export const get = query({
         ).paginate(paginationOpts)
         }
 
+        // all docs inside org
+        if (organizationId){
+            return await ctx.db.query("documents")
+            .withIndex("by_organization_id",(q)=> q.eq("organizationId",organizationId))
+            .paginate(paginationOpts);
+        }
         
+        //all personal docss
         return await ctx.db.query("documents")
         .withIndex("by_owner_id",(q)=> q.eq("ownerId",user.subject))
         .paginate(paginationOpts);
