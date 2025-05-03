@@ -35,6 +35,7 @@ import {
 import { BsFilePdf } from "react-icons/bs";
 import useEditorStore from "@/store/use-editor-store";
 import { blob } from "stream/consumers";
+import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
 
 export const Navbar = () => {
     const {editor} = useEditorStore();
@@ -161,7 +162,8 @@ export const Navbar = () => {
                 </MenubarContent>
               </MenubarMenu>
               <MenubarMenu>
-                <MenubarTrigger className="text-sm font-normal py-0.5 px-[7px] rounded-sm hover:bg-muted h-auto">
+                <MenubarTrigger className="tex
+                t-sm font-normal py-0.5 px-[7px] rounded-sm hover:bg-muted h-auto">
                   Insert
                 </MenubarTrigger>
                 <MenubarContent>
@@ -226,6 +228,15 @@ export const Navbar = () => {
             </Menubar>
           </div>
         </div>
+      </div>
+      <div className="flex gap-3 items-center">
+        <OrganizationSwitcher
+        afterCreateOrganizationUrl="/"
+        afterLeaveOrganizationUrl="/"
+        afterSelectOrganizationUrl="/"
+        afterSelectPersonalUrl="/"
+        />
+      <UserButton />
       </div>
     </nav>
   );
