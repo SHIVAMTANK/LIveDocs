@@ -7,6 +7,7 @@ interface DocumentPageProps {
 }
 
 const DocumentPage = async ({ params }: DocumentPageProps) => {
+               
   const { documentid } = await params;
 
   return (
