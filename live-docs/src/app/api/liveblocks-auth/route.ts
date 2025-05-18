@@ -1,59 +1,53 @@
+// /api/liveblocks-auth/route.ts
 import { Liveblocks } from "@liveblocks/node";
-import { ConvexClient, ConvexHttpClient } from "convex/browser";
-import { auth,currentUser } from "@clerk/nextjs/server";
+import { ConvexHttpClient } from "convex/browser";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import { api } from "../../../../convex/_generated/api";
 
 const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
-const liveblocks = new Liveblocks(
-   { secret:process.env.LIVEBLOCKS_SECRET_KEY!}
-);
+const liveblocks = new Liveblocks({
+  secret: process.env.LIVEBLOCKS_SECRET_KEY!,
+});
 
+export async function POST(req: Request) {
+  const { sessionClaims } = await auth();
+  const user = await currentUser();
 
+  if (!sessionClaims || !user) {
+    return new Response("Unauthorized", { status: 401 });
+  }
 
-export async function POST(req:Request) {
+  const { room } = await req.json();
 
-    const { sessionClaims} = await auth();
-    
-    if(!sessionClaims){
-        return new Response("Unauthorized",{status:401})
-    }
+  if (!room) {
+    return new Response("Missing room ID", { status: 400 });
+  }
 
-    const user = await currentUser();
-    console.log({sessionClaims});
-    
-    if(!user){
-        return new Response("Unauthorized",{status:401});
-    }
+  const document = await convex.query(api.documents.getById, { id: room });
 
-    const {room } = await req.json();
+  if (!document) {
+    return new Response("Unauthorized", { status: 401 });
+  }
 
-    const document = await convex.query(api.documents.getById,{id:room});
+  const isOwner = document.ownerId === user.id;
+  const isOrgMember =
+    document.organizationId &&
+    document.organizationId === sessionClaims.org_id;
 
-    if(!document){
-        return new Response("Unauthorized",{status:401});
-    }
+  if (!isOwner && !isOrgMember) {
+    return new Response("Unauthorized", { status: 401 });
+  }
 
-    const isOwner = document.ownerId === user.id;
+  const session = liveblocks.prepareSession(user.id, {
+    userInfo: {
+      name:
+        user.fullName ?? user.primaryEmailAddress?.emailAddress ?? "Anonymous",
+      avatar: user.imageUrl,
+    },
+  });
 
-    const isOrganizationMember =  !!(document.organizationId  && document.organizationId === sessionClaims.org_id);
+  session.allow(room, session.FULL_ACCESS);
+  const { body, status } = await session.authorize();
 
-    console.log({isOwner,isOrganizationMember});
-
-
-
-    if(!isOwner && !isOrganizationMember){
-        return new Response("Unauthorized",{status:401});
-    }
-
-    const session = liveblocks.prepareSession(user.id,{
-        userInfo:{
-            name:user.fullName ?? "Anonymous",
-            avatar:user.imageUrl,
-        }
-    });
-    
-    session.allow(room,session.FULL_ACCESS);
-    const {body,status} = await session.authorize();
-
-    return new Response(body,{status})
+  return new Response(body, { status });
 }
