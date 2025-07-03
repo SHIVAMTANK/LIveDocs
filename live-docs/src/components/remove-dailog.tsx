@@ -17,6 +17,7 @@ import { Id } from "../../convex/_generated/dataModel";
 import React, { useState } from "react";
 import { useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
+import { useRouter } from "next/navigation";
 
 interface RemoveDailogProps {
   documentId: Id<"documents">;
@@ -26,6 +27,7 @@ interface RemoveDailogProps {
 export const RemoveDialog = ({ documentId, children }: RemoveDailogProps) => {
   const remove = useMutation(api.documents.removeById);
   const [isRemoving, setIsRemoving] = useState(false);
+  const router = useRouter();
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
@@ -48,7 +50,10 @@ export const RemoveDialog = ({ documentId, children }: RemoveDailogProps) => {
               setIsRemoving(true);
               remove({ id: documentId })
               .catch(()=> toast.error("Something went wrong"))
-              .then(()=>toast.success("Document remove"))
+              .then(()=>{
+                toast.success("Document remove")
+                router.push("/");
+              })
               .finally(() => setIsRemoving(false));
             }}
           >

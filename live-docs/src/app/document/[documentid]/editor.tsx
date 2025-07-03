@@ -16,24 +16,24 @@ import useEditorStore from "@/store/use-editor-store";
 import TextStyle from "@tiptap/extension-text-style";
 import { Color } from "@tiptap/extension-color";
 import Highlight from "@tiptap/extension-highlight";
-import Link from '@tiptap/extension-link';
-import TextAlign from '@tiptap/extension-text-align';
+import Link from "@tiptap/extension-link";
+import TextAlign from "@tiptap/extension-text-align";
 import { FontSizeExtension } from "@/extensions/font-size";
 import { LineHeightExtension } from "@/extensions/line-height";
-import { types } from "util";
+// import { types } from "util";
 import { Ruler } from "./ruler";
 import { useLiveblocksExtension } from "@liveblocks/react-tiptap";
 import { Threads } from "./threads";
 import { useStorage } from "@liveblocks/react/suspense";
-import { root } from "postcss";
+// import { root } from "postcss";
 
 export const Editor = () => {
-  const leftMargin = useStorage((root)=>root.leftMargin);
-  const rightMargin = useStorage((root)=>root.rightMargin);
+  const leftMargin = useStorage((root) => root.leftMargin);
+  const rightMargin = useStorage((root) => root.rightMargin);
   const liveblocks = useLiveblocksExtension();
   const { setEditor } = useEditorStore();
   const editor = useEditor({
-    immediatelyRender:false,
+    immediatelyRender: false,
     onCreate({ editor }) {
       setEditor(editor);
     },
@@ -61,32 +61,31 @@ export const Editor = () => {
 
     editorProps: {
       attributes: {
-        style: `padding-left:${leftMargin ?? 56}; padding-right: ${rightMargin ?? 56};`,
+        style: `padding-left:${leftMargin ?? 56}px; padding-right: ${rightMargin ?? 56}px;`,
         class:
           "focus:outline-none print:border-0 bg-white border border-[#C7C7C7] flex flex-col min-h-[1054px] w-[816px] pt-10 pr-14 pb-10 cursor-text",
       },
     },
     extensions: [
-
       StarterKit.configure({
-        history:false
+        history: false,
       }),
       liveblocks,
       FontSizeExtension,
       LineHeightExtension.configure({
-        types:["paragraph","heading"],
-        defaultLineHeight:"normal"
+        types: ["paragraph", "heading"],
+        defaultLineHeight: "normal",
       }),
       TextAlign.configure({
-        types: ['heading', 'paragraph'],
+        types: ["heading", "paragraph"],
       }),
       Highlight.configure({
-        multicolor:true,
+        multicolor: true,
       }),
       Link.configure({
-        openOnClick:true,
-        autolink:true,
-        defaultProtocol:'https'
+        openOnClick: true,
+        autolink: true,
+        defaultProtocol: "https",
       }),
       Color,
       TextStyle,
@@ -107,10 +106,10 @@ export const Editor = () => {
 
   return (
     <div className="size-full overflow-auto bg-[#F9FBFD] px-4 print:px-0 print:bg-white print:overflow-visible">
-        <Ruler />
+      <Ruler />
       <div className="min-w-max flex justify-center w-[816px] py-4 print:py-0 mx-auto print:w-full print:min-w-0">
         <EditorContent editor={editor} />
-       <Threads editor={editor}/>
+        <Threads editor={editor} />
       </div>
     </div>
   );

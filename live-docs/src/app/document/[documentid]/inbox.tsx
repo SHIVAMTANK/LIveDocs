@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client"
 import { Bell, BellIcon } from "lucide-react"
 import { InboxNotification ,InboxNotificationList} from "@liveblocks/react-ui"

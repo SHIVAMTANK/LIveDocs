@@ -10,8 +10,10 @@ export const Ruler = () =>{
     const setLeftMargin = useMutation(({storage},position:number)=>{
         storage.set("leftMargin",position);
     },[]);
-     const rightMargin = useStorage((root)=>root.rightMargin);
-
+    const rightMargin = useStorage((root)=>root.rightMargin);
+    const setRightMargin = useMutation(({storage},position:number)=>{
+        storage.set("rightMargin",position);
+    },[]);
     
     const [isDraggingLeft,setIsDraggingLeft] = useState(false);
     const [isDraggingRight,setIsDraggingRight] = useState(false);
@@ -63,10 +65,11 @@ export const Ruler = () =>{
                     setLeftMargin(newLeftPosition);
                 }
                 else if(isDraggingRight){
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
                     const maxRightPosition = PAGE_WIDTH - (leftMargin + MINI_SPACE);
                     const newRightPosition = Math.max(PAGE_WIDTH-rawPosition,0);
-                    const constrainedRightPosition = Math.min(newRightPosition,maxRightPosition);
-
+                    // const constrainedRightPosition = Math.min(newRightPosition,maxRightPosition);
+                    setRightMargin(newRightPosition);
 
                     // setRightMargin(constrainedRightPosition);
                 }
@@ -86,7 +89,7 @@ export const Ruler = () =>{
 
     }
     const handleRightDoubleClick = () =>{
-        // setRightMargin(56);
+        setRightMargin(56);
         
     }
     return(

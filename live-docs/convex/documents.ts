@@ -1,8 +1,8 @@
 import { mutation, query } from "./_generated/server";
 import { ConvexError, v } from "convex/values";
 import { paginationOptsValidator } from "convex/server";
-import { title } from "process";
-import { use } from "react";
+// import { title } from "process";
+// import { use } from "react";
 
 //a write oparation function
 //accepts tqo optional string argument
@@ -168,6 +168,9 @@ export const getById = query({
   args: { id: v.id("documents") },
   handler: async (ctx, { id }) => {
     const document = await ctx.db.get(id);
+    if(!document){
+      throw new ConvexError("Document not found");
+    }
     return document;
   },
 });
