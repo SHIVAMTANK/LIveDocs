@@ -21,6 +21,8 @@ export async function getUsers() {
     organizationId: [sessionClaims?.org_id as string],
   });
 
+ 
+
   const users = response.data.map((user) => ({
     id: user.id,
     name:
@@ -28,6 +30,7 @@ export async function getUsers() {
 
     // kem ke google login hase to email hase nito full name
     avatar: user.imageUrl,
+    color:""
   }));
 
   return users;

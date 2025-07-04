@@ -284,8 +284,6 @@ const ImageButton = () => {
   const { editor } = useEditorStore();
   const [imgUrl, setImgUrl] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [open, setIsOpen] = useState(false);
-
   const onChange = (src: string) => {
     editor?.chain().focus().setImage({ src }).run();
   };
