@@ -1,7 +1,5 @@
 import { Extension } from "@tiptap/react";
 import "@tiptap/extension-text-style";
-import { types } from "util";
-import { channel } from "diagnostics_channel";
 
 declare module "@tiptap/core"{
     interface Commands<ReturnType>{

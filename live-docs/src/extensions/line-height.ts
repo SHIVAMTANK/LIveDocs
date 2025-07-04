@@ -1,6 +1,4 @@
 import { Extension } from "@tiptap/react";
-import { teardownHeapProfiler } from "next/dist/build/swc/generated-native";
-
 declare module "@tiptap/core"{
     interface Commands<ReturnType>{
         lineHeight:{

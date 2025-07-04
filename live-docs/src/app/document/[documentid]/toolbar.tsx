@@ -2,17 +2,14 @@
 
 import { cn } from "@/lib/utils";
 import useEditorStore from "@/store/use-editor-store";
-import { log } from "console";
-import { on } from "events";
+
 import {
-  AlignCenter,
   AlignCenterIcon,
   AlignJustifyIcon,
   AlignLeftIcon,
   AlignRightIcon,
   BoldIcon,
   ChevronDownIcon,
-  Highlighter,
   HighlighterIcon,
   ImageIcon,
   ItalicIcon,
@@ -22,7 +19,6 @@ import {
   ListOrderedIcon,
   ListTodoIcon,
   LucideIcon,
-  MessageSquare,
   MessageSquarePlusIcon,
   MinusIcon,
   PlusIcon,
@@ -42,7 +38,6 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
-  DialogTrigger,
   DialogFooter,
   DialogHeader,
 } from "@/components/ui/dialog";
@@ -55,16 +50,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { type Level } from "@tiptap/extension-heading";
-import Color from "@tiptap/extension-color";
-import { type ColorResult, CirclePicker, SketchPicker } from "react-color";
+import { type ColorResult,SketchPicker } from "react-color";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Value } from "@radix-ui/react-select";
-import { Label } from "recharts";
-
-
-
-
 
 const LineHeightButton = () => {
   const { editor } = useEditorStore();
@@ -710,7 +698,7 @@ export const Toolbar = () => {
         label: "Comment",
         icon: MessageSquarePlusIcon,
         onClick: () => editor?.chain().focus().addPendingComment().run(),
-        isActive:editor?.isActive("liveblocksCommentMark")
+        isActive: editor?.isActive("liveblocksCommentMark"),
       },
       {
         label: "List Todo",

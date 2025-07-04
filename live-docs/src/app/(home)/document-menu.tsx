@@ -5,7 +5,7 @@ import {
   MoreVertical,
   TrashIcon,
 } from "lucide-react";
-import { Doc, Id } from "../../../convex/_generated/dataModel";
+import { Id } from "../../../convex/_generated/dataModel";
 import {
   DropdownMenu,
   DropdownMenuItem,
