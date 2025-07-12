@@ -59,3 +59,4 @@ export async function POST(req: Request) {
 
   return new Response(body, { status });
 }
+// this is a simple post request 
