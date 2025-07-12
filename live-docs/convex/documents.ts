@@ -11,7 +11,6 @@ export const getByIdS = query({
   args:{ids:v.array(v.id("documents"))},
   handler:async (ctx,{ids})=>{
     const documents = [];
-
     for(const id of ids){
       const document = await ctx.db.get(id);
       if(document){
@@ -22,10 +21,7 @@ export const getByIdS = query({
     }
     return documents;
   },
-
 })
-
-
 
 
 export const create = mutation({

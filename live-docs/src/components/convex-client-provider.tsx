@@ -1,7 +1,6 @@
 "use client";
 
 import {
- 
   ConvexReactClient,
   Authenticated,
   Unauthenticated,

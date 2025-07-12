@@ -99,6 +99,7 @@ const FontSizeButton = () => {
     ? editor?.getAttributes("textStyle").fontSize.replace("px", "")
     : "16";
 
+    // like 18px use only 18 that's why replace
   const [fontSize, setFontSize] = useState(currentFontSize);
 
   const [inputValue, setInputValue] = useState(fontSize);

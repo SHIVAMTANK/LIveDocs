@@ -57,6 +57,8 @@ interface State {
   toasts: ToasterToast[]
 }
 
+//starts a timer for a toast to be automatically removed
+// use map for duplicate toast ids
 const toastTimeouts = new Map<string, ReturnType<typeof setTimeout>>()
 
 const addToRemoveQueue = (toastId: string) => {

@@ -9,6 +9,9 @@ import { Editor } from "@tiptap/react";
 
 export const Threads = ({ editor }: { editor: Editor | null }) => {
   return(
+    // It allows you to suspend rendering of a component until 
+    // Liveblocks data (like comments/threads/presence) is available on the client,
+    //  without causing issues during server-side rendering (SSR).
     <ClientSideSuspense fallback={null}>
       <ThreadsList editor={editor}/>
     </ClientSideSuspense>
@@ -16,11 +19,13 @@ export const Threads = ({ editor }: { editor: Editor | null }) => {
 }
 
 function ThreadsList({ editor }: { editor: Editor | null }) {
+  // fetch collaborative comments
   const { threads } = useThreads({ query: { resolved: false } });
 
   return (
     <>
       <div className="anchored-threads">
+        {/* display comment directly next to the thry're attached to */}
         <AnchoredThreads editor={editor} threads={threads} />
       </div>
       <FloatingThreads
